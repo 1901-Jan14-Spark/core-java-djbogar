@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,11 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String reverseStr = "";
+		for(int i = string.length()-1; i>=0; i--) {
+			reverseStr += string.charAt(i);
+		}
+		return reverseStr;
 	}
 
 	/**
@@ -28,7 +33,12 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String[] words = phrase.split("\\W+");
+		String acronym = "";
+		for(String word : words) {
+			acronym += word.charAt(0);
+		}
+		return acronym.toUpperCase();
 	}
 
 	/**
@@ -81,18 +91,30 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if(sideOne == sideTwo && sideOne == sideThree && sideTwo == sideThree) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if(sideOne == sideTwo || sideTwo == sideThree || sideOne == sideThree) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if(sideOne != sideTwo && sideOne != sideThree && sideTwo != sideThree) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 	}
@@ -113,8 +135,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		char[] scrabbleArray = string.toUpperCase().toCharArray();
+		int score = 0;
+		
+		for(int i=0; i<scrabbleArray.length; i++) {
+			switch(scrabbleArray[i]) {
+				case 'A': case 'E': case 'I': case 'O': case 'U': case 'L': case 'N': case 'R': case 'S': case 'T':
+					score+=1;
+					break;
+				case 'D': case 'G':
+					score+=2;
+					break;
+				case 'B': case 'C': case 'M': case 'P':
+					score+=3;
+					break;
+				case 'F': case 'H': case 'V': case 'W': case 'Y':
+					score+=4;
+					break;
+				case 'K':
+					score+=5;
+					break;
+				case 'J': case 'X':
+					score+= 8;
+					break;
+				case 'Q': case 'Z':
+					score+= 10;
+					break;
+				default: 
+					score+=0;
+					break;
+			}
+		}
+		return score;
 	}
 
 	/**
@@ -149,8 +201,21 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String[] numbers = string.split("[^0-9]");
+		String number = "";
+		for(String i : numbers) {
+			number+=i;
+		}
+		if(number.length() == 10) {
+			return number;
+		}
+		else if(number.length() == 11 && number.charAt(0)== '1') {
+			number = number.substring(1);
+			return number;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	/**
@@ -163,8 +228,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> strMap = new HashMap<String, Integer>();
+		String[] strings = string.split("\\W+");
+		int index = 0;
+		for(String i : strings) {
+			if(!strMap.containsKey(i)) {
+				strMap.put(i, 1);
+			}
+			else {
+				index = strMap.get(i);
+				strMap.put(i, index+1);
+			}
+		}
+		return strMap;
 	}
 
 	/**
@@ -206,7 +282,19 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
+			int left = 0;
+			int right = sortedList.size() -1;
+			int middle = sortedList.size()/2;
+			if(sortedList.get(middle) == t) {
+				return middle;
+			}
+			else if(sortedList.get(middle).equals(t) > 0) {
+				
+			}
+			else if(sortedList.get(middle).equals(t) < t) {
+				
+			}
+			
 			return 0;
 		}
 
@@ -243,7 +331,15 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
+		String[] strArray = string.split(" ");
+		char[] vowelArray = new char[]{'a','e','i','o', 'u'};
+		String pigLatin = "";
+		for(String i: strArray) {
+			for(char j: vowelArray) {
+				
+			}
+		}
+		
 		return null;
 	}
 
