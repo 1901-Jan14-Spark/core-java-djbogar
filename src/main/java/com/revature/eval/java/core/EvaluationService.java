@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,16 +283,18 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
+			List<T> arrList = new ArrayList<>();
+			arrList = getSortedList();
 			int left = 0;
-			int right = sortedList.size() -1;
-			int middle = sortedList.size()/2;
-			if(sortedList.get(middle) == t) {
+			int right = arrList.size() -1;
+			int middle = arrList.size()/2;
+			if(arrList.get(middle) == t) {
 				return middle;
 			}
-			else if(sortedList.get(middle).equals(t) > 0) {
+			else if(arrList.get(middle).equals(t) > 0) {
 				
 			}
-			else if(sortedList.get(middle).equals(t) < t) {
+			else if(t.equals(arrList.get(middle)) < 0) {
 				
 			}
 			
@@ -359,8 +362,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String numberStr = "" + input;
+		int digits = 0;
+		int currentValue = 0;
+		int sum = 0;
+		while(digits < numberStr.length()) {
+			String number = ""+ numberStr.charAt(digits);
+			currentValue = Integer.parseInt(number);
+			sum += Math.pow(currentValue, numberStr.length());
+			digits++;
+		}
+		if(sum == input) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**
@@ -374,8 +391,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Integer> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Integer> factorList = new ArrayList<>();
+		//get all the factors of two added to the list
+		while(l%2 == 0) {
+			factorList.add(2);
+			l = l/2;
+		}
+		//starts at 3 because two is taken care of,
+		// square root covers the maximum needed iterations
+		// increment by 2 because odd are no longer need since we factored out 2
+		for(int i = 3; i <= Math.sqrt(l); i += 2) {
+			while(l%i == 0) {
+				factorList.add(i);
+				l = l/i;
+			}
+		}
+		return factorList;
 	}
 
 	/**
@@ -413,8 +444,27 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			StringBuilder textLowerCase = new StringBuilder("abcdefghijklmnopqrstuvwxyz");
+			StringBuilder textUpperCase = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			StringBuilder encoded = new StringBuilder();
+			int charValue = 0;
+			for(int i = 0; i<string.length(); i++) {
+				if(textLowerCase.indexOf(""+ string.charAt(i)) != -1) {
+					charValue = textLowerCase.indexOf(""+ string.charAt(i));
+					encoded.append(textLowerCase.charAt((charValue + key)%26));
+				}
+				else if(textUpperCase.indexOf(""+ string.charAt(i)) != -1) {
+					charValue = textUpperCase.indexOf(""+ string.charAt(i));
+					encoded.append(textUpperCase.charAt((charValue + key)%26));
+				}
+				else {
+					encoded.append(string.charAt(i));
+				}
+			}
+			
+			
+			return encoded.toString();
+			
 		}
 
 	}
@@ -432,8 +482,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int primeNumber = 0;
+		int primeCount = 0;
+		int count = 0;
+		if(i <=0) {
+			throw new IllegalArgumentException();
+		}
+		while(primeCount<i) {
+			if(isPrime(count) == true) {
+				primeNumber = count;
+				primeCount++;
+				count++;
+			}
+			else {
+				count++;
+			}
+		}
+		return primeNumber;
+	}
+	
+	public boolean isPrime(int number) {
+		if(number <=1) {
+			return false;
+		}
+		for(int i = 2; i< number; i++) {
+			if(number%i == 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -508,8 +585,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		StringBuilder modifiedString = new StringBuilder();
+		StringBuilder validCharacters = new StringBuilder("0123456789X");
+		int value = 0;
+		for(int i = 0; i<string.length(); i++) {
+			if(string.charAt(i) != '-') {
+				modifiedString.append(string.charAt(i));
+			}
+		}
+		for(int i = 0; i<modifiedString.length(); i++) {
+			if(validCharacters.indexOf(""+ modifiedString.charAt(i)) == -1) {
+				return false;
+			}
+		}
+		for(int i = 0; i < modifiedString.length() - 1; i++) {
+			value += Integer.parseInt("" + modifiedString.charAt(i)) * (10 - i);
+		}
+		if(modifiedString.charAt(modifiedString.length()-1) == 'X') {
+			value += 10;
+		}
+		else {
+			value += Integer.parseInt("" + modifiedString.charAt(modifiedString.length()-1)) * 1;
+		}
+		if(value%11 == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
 	}
 
 	/**
