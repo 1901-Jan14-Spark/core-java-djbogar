@@ -1,8 +1,13 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -335,14 +340,27 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		String[] strArray = string.split(" ");
-		char[] vowelArray = new char[]{'a','e','i','o', 'u'};
-		String pigLatin = "";
-		for(String i: strArray) {
-			for(char j: vowelArray) {
+		char[] vowels = {'a','e','i','o','u'};
+		int start = 0;
+		int firstVowel = 0;
+		String output = "";
+		for(String str : strArray) {
+			for(int i = 0; i < str.length(); i++ ) {
+			char c = Character.toLowerCase(str.charAt(i));
+				if(Arrays.asList(vowels).contains(c) && !str.substring(0,2).equals("qu")) {
+					firstVowel = i;
+					break;
+				}
+				else {
+					firstVowel = 2;
+				}
+			}
+			if(start != firstVowel) {
+				String startString = str.substring(firstVowel, str.length() - 1);
+				String endString = str.substring(start, firstVowel)+ "ay";
 				
 			}
 		}
-		
 		return null;
 	}
 
@@ -400,12 +418,15 @@ public class EvaluationService {
 		//starts at 3 because two is taken care of,
 		// square root covers the maximum needed iterations
 		// increment by 2 because odd are no longer need since we factored out 2
-		for(int i = 3; i <= Math.sqrt(l); i += 2) {
-			while(l%i == 0) {
-				factorList.add(i);
-				l = l/i;
+		long value = 3;
+		for(int i = 3; i < l; i += 2) {
+			while(l%value == 0) {
+				factorList.add((int) value);
+				l = l/value;
+				value+=2;
 			}
 		}
+		System.out.println(factorList);
 		return factorList;
 	}
 
@@ -630,8 +651,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		String letters = "";
+		String[] strArray = new String[string.length()];
+		int letterCount = 0;
+		for(int i = 0; i < string.length(); i++) {
+			strArray[i] = string.substring(i, i+1).toLowerCase();
+		}
+		for(String c : strArray) {
+			if(!c.equals(" ") && alphabet.contains(c) == true && letters.contains(c) == false) {
+				letters += c;
+				letterCount++;
+			}
+		}
+		if(letterCount == 26) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 
 	/**
@@ -643,8 +682,10 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		 long time = 1000000000;
+//		Temporal newDate = given.add(Calender.SECOND, time);
+		
+		return given.plus(time, ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -661,8 +702,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int sum = 0;
+		HashSet<Integer> numbers = new HashSet<>();
+		for(int j = 0; j < set.length; j++) {
+			int increment = 1;
+			int multiple = set[j];
+			while(set[j]*increment < i) {
+				multiple = set[j]*increment;
+//				sum += multiple;
+				numbers.add(multiple);
+				increment++;
+			}
+			
+		}
+		for(Integer number : numbers) {
+			sum += (int) number;
+		}
+		return sum;
 	}
 
 	/**
@@ -702,8 +758,41 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String numSpace = " 0123456789";
+		int sumOfDouble = 0;
+		int sumOfSingle = 0;
+		int sum = 0;
+		boolean answer = false;
+		String[] numbers = string.split("[^0-9]");
+		String numbersOnly = "";
+		for(String number:numbers) {
+			numbersOnly += number;
+		}
+		for(int i = numbersOnly.length() - 2; i>= 0; i -= 2) {
+			int holder = Integer.parseInt(numbersOnly.substring(i, i+1));
+			holder *=2;
+			if(holder >= 10) {
+				holder -= 9;
+			}
+			sumOfDouble += holder;
+		}
+		for(int i = numbersOnly.length() - 1; i>=0; i -= 2) {
+			int holder = Integer.parseInt(numbersOnly.substring(i, i+1));
+			sumOfSingle += holder;
+		}
+		sum = sumOfSingle + sumOfDouble;
+		if(sum%10 == 0) {
+			answer = true;
+		}
+		else {
+			answer = false;
+		}
+		for(int i = 0; i<string.length() -1; i++) {
+			if(!numSpace.contains(string.substring(i, i+1))){
+				answer = false;
+			}
+		}
+		return answer;
 	}
 
 	/**
@@ -734,8 +823,25 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		String[] words = string.split(" ");
+		int first = Integer.parseInt(words[2]);
+		String secondNumber = words[words.length -1];
+		int second = Integer.parseInt(secondNumber.substring(0, secondNumber.length() -1));
+		String operation = words[3];
+		int output = 0;
+		if(operation.equals("plus")) {
+			output =  first + second;
+		}
+		else if(operation.equals("minus")) {
+			output = first - second;
+		}
+		else if(operation.equals("multiplied")) {
+			output =  first*second;
+		}
+		else if(operation.contentEquals("divided") && second != 0) {
+			output =  first/second;
+		}
+		return output;
 	}
 
 }
