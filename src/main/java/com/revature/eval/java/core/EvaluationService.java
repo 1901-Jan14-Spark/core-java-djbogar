@@ -339,29 +339,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		String[] strArray = string.split(" ");
+		String str = string;
 		char[] vowels = {'a','e','i','o','u'};
 		int start = 0;
 		int firstVowel = 0;
 		String output = "";
-		for(String str : strArray) {
 			for(int i = 0; i < str.length(); i++ ) {
-			char c = Character.toLowerCase(str.charAt(i));
-				if(Arrays.asList(vowels).contains(c) && !str.substring(0,2).equals("qu")) {
-					firstVowel = i;
-					break;
-				}
-				else {
-					firstVowel = 2;
+				char c = Character.toLowerCase(str.charAt(i));
+			if(Arrays.asList(vowels).contains(c)) {
+				firstVowel = i;
+				break;
 				}
 			}
 			if(start != firstVowel) {
-				String startString = str.substring(firstVowel, str.length() - 1);
-				String endString = str.substring(start, firstVowel)+ "ay";
-				
-			}
-		}
-		return null;
+				String endString = str.substring(firstVowel, str.length() - 1);
+				String startString = str.substring(start, firstVowel)+ "ay";
+				output = startString + endString;
+				}
+		return output;
 	}
 
 	/**
@@ -408,25 +403,18 @@ public class EvaluationService {
 	 * @param l
 	 * @return
 	 */
-	public List<Integer> calculatePrimeFactorsOf(long l) {
-		List<Integer> factorList = new ArrayList<>();
+	public List<Long> calculatePrimeFactorsOf(long l) {
+		List<Long> factorList = new ArrayList<>();
 		//get all the factors of two added to the list
-		while(l%2 == 0) {
-			factorList.add(2);
-			l = l/2;
-		}
 		//starts at 3 because two is taken care of,
 		// square root covers the maximum needed iterations
 		// increment by 2 because odd are no longer need since we factored out 2
-		long value = 3;
-		for(int i = 3; i < l; i += 2) {
-			while(l%value == 0) {
-				factorList.add((int) value);
-				l = l/value;
-				value+=2;
+		for(long i = 2; i <= l; i++) {
+			while(l%i == 0) {
+				factorList.add(i);
+				l = l/i;
 			}
 		}
-		System.out.println(factorList);
 		return factorList;
 	}
 
